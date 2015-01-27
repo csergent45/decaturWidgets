@@ -1,0 +1,270 @@
+﻿<!DOCTYPE html>
+<html>
+    <head>
+        <title>Widgets</title>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8">
+        <meta name="viewport" content="initial-scale=1,maximum-scale=1, user-scalable=no">
+        <link rel="stylesheet" href="http://js.arcgis.com/3.12/dijit/themes/soria/soria.css">
+        <link rel="stylesheet" href="http://js.arcgis.com/3.12/esri/css/esri.css">
+
+        <link rel="SHORTCUT ICON" href="images/widget.png" />
+
+        <link rel="apple-touch-icon" href="images/iWidget.png" />
+
+        <link href="css/custom-theme/jquery-ui-1.10.3.custom.min.css" rel="stylesheet" type="text/css" />
+
+        <style>
+            html, body, #mapSection
+            {
+                padding:0;
+                margin:0;
+                height:100%;
+                width:100%;
+           
+            }
+            
+            
+            
+            .fb-like-box
+            {
+                background-color:Black;
+            }
+            
+            
+                        
+            
+#sideBar
+{
+    display:block; /* Only for IE8 or less */
+    position:absolute;
+    width:302px;
+    height:auto;
+    background-color:transparent;
+    border-color:transparent;
+    padding:0px;
+    left:50px;
+    top:50px;
+    z-index:200
+}
+
+
+#sideBarContent
+{
+    width:300px;
+    padding:0px
+}
+   
+
+#sideBarTopFill, #sideBarBottomFill
+{
+    height:15px;
+    background-color:#E1EBFB;
+        
+}
+
+#sideBarTop
+{
+    background-color:#E1EBFB;
+    height:5px;
+    border-top-left-radius:5px;
+    border-top-right-radius:5px
+}
+
+#sideBarBottom
+{
+    background-color:#E1EBFB;
+    height:5px;
+    border-bottom-left-radius:5px;
+    border-bottom-right-radius:5px;
+        
+}
+
+            
+
+
+        </style>
+        <script src="http://js.arcgis.com/3.12/"></script>
+
+        <!-- jQuery Library -->
+        <script src="js/jquery-1.9.1.js" type="text/javascript"></script>
+        <script src="js/jquery-ui-1.10.3.custom.min.js" type="text/javascript"></script>
+        <!-- Enables jquery mouse events to work as touch events on mobile devices: https://github.com/copernicus365/jquery-ui-touch-punch/blob/master/jquery.ui.touch-punch.js -->
+        <script src="js/jquery.ui.touch-punch.js" type="text/javascript"></script>
+
+        <script>
+            var map;
+            require(["esri/map", "esri/config",
+                     "esri/geometry/Extent",
+                     "esri/layers/ArcGISDynamicMapServiceLayer",
+                     "esri/layers/ArcGISTiledMapServiceLayer",
+                     "esri/layers/FeatureLayer",
+                     "esri/tasks/GeometryService",
+                     "dojo/dom",
+                     "dojo/on",
+                     "dojo/parser",
+                     "dojo/domReady!"], function (Map, esriConfig, Extent, ArcGISDynamicMapServiceLayer, ArcGISTiledMapServiceLayer, FeatureLayer, GeometryService, dom, on, parser
+            ) {
+                         parser.parse();
+
+                         /* The proxy comes before all references to web services */
+                         /* Files required for security are proxy.config, web.config and proxy.ashx 
+                         - set security in Manager to Private, available to selected users and select Allow access to all users who are logged in
+                         (Roles are not required)
+                         /*
+                         The proxy section is defined on the ESRI sample. I have included it as
+                         part of the documentation reads that the measuring will not work.
+                         I thought that might be important.
+                         */
+
+                         // Proxy Definition Begin 
+                         //identify proxy page to use if the toJson payload to the geometry service is greater than 2000 characters.
+                         //If this null or not available the project and lengths operation will not work. 
+                         // Otherwise it will do a http post to the proxy.
+                         esriConfig.defaults.io.proxyUrl = "proxy.ashx";
+                         esriConfig.defaults.io.alwaysUseProxy = false;
+
+                         // Proxy Definition End
+
+
+                         // set custom extent
+                         var initialExtent = new Extent({
+                             "xmin": 777229.03,
+                             "ymin": 1133467.92,
+                             "xmax": 848340.14,
+                             "ymax": 1185634.58,
+                             "spatialReference": {
+                                 "wkid": 3435
+                             }
+                         });
+
+                         // create map and set slider style to small
+                         map = new Map("mapSection", {
+                             showAttribution: false,
+                             sliderStyle: "small",
+                             extent: initialExtent,
+                             logo: false
+                         });
+
+                         // add imagery
+                         var tiled = new ArcGISTiledMapServiceLayer("http://maps.decaturil.gov/arcgis/rest/services/Aerial_2014_Tiled/MapServer");
+                         map.addLayer(tiled);
+                         // set operational layers
+                         var operationalLayer = new ArcGISDynamicMapServiceLayer("http://maps.decaturil.gov/arcgis/rest/services/Public/InternetVector/MapServer", { "opacity": 0.5 });
+                         // add operational layers
+                         map.addLayer(operationalLayer);
+
+                         // add point feature layer
+                         var pointFeatureLayer = new FeatureLayer("http://maps.decaturil.gov/arcgis/rest/services/Test/FeatureServer/0");
+                         map.addLayer(pointFeatureLayer);
+
+                         // declare geometry service
+                         esriConfig.defaults.geometryService = new GeometryService("http://maps.decaturil.gov/arcgis/rest/services/Utilities/Geometry/GeometryServer");
+
+                     }
+            );
+        </script>
+    </head>
+    <body class="soria">
+
+       
+       <!-- Sidebar Begin -->
+        <aside id="sideBar">
+            <!-- Sidebar Top Begin -->
+            <div id="sideBarTop">
+            
+            </div>                
+            <!-- Sidebar Top End -->
+
+            <!-- Sidebar Top Fill Begin -->
+            <div id="sideBarTopFill">
+            
+            </div>
+            <!-- Sidebar Top Fill End -->
+
+            <!-- Sidebar Title Begin -->
+            <div id="sideBarTitle">
+                <p>Social Networks</p>
+                <!-- Sidebar Content Begin -->
+                <div id="sideBarContent">
+                    <h3>Twitter</h3>
+                    <!-- Decatur Twitter Begins -->
+                    <div id="decaturTwitter">
+                        Tweets
+                    </div>
+                    <!-- Decatur Twitter Ends -->
+
+                    <h3>Facebook</h3>
+                    <!-- Decatur Facebook Begins -->
+                    <div id="decaturFacebook">
+                        Postes
+                    </div>
+                    <!-- Decatur Facebook Ends -->
+
+                    <h3>LinkedIn</h3>
+                    <!-- Company Profile Begin -->
+                    <div id="companyProfile">
+                        Jobs
+                    </div>
+                    <!-- Company Profile End -->
+
+                    <h3>YouTube</h3>
+                    <!-- YouTube Channel Begin -->
+                    <div id="youTubeChannnel">
+                        Video
+                    </div>
+                    <!-- YouTube Channel End -->
+
+                </div>
+                <!-- Sidebar Content End -->
+            </div>
+            <!-- Sidebar Title End -->
+
+            <!-- Sidebar Bottom Fill Begin -->
+            <div id="sideBarBottomFill">
+            
+            </div>
+            <!-- Sidebar Bottom Fill End -->
+
+            <!-- Sidebar Bottom Begin -->
+            <div id="sideBarBottom">
+            
+            </div>
+            <!-- Sidebar Bottom End -->
+        </aside>
+        <!-- Sidebar End -->
+
+
+        <!-- Map Section Begin -->
+        <section id="mapSection">
+        
+        </section>
+        <!-- Map Section End -->      
+        
+        
+         <script type="text/javascript">
+             /* Enables Sidebar to be draggable */
+             jQuery(function () {
+                 jQuery("#sideBar").draggable();
+             });
+
+
+             /* The accordion allows sections to expand/collapse which show or hide each section */
+             jQuery(function () {
+                 jQuery("#sideBarTitle").accordion({
+                     collapsible: true,
+                     heightStyle: "content"
+                 });
+             });
+
+
+             /* Setting an active panel - http://api.jqueryui.com/accordion/#option-active */
+             jQuery(function () {
+                 jQuery("#sideBarContent").accordion({
+                     heightStyle: "content"
+                 });
+                 jQuery("#sideBarContent").accordion("option", "active", 0);
+             });
+
+        </script> 
+    </body>
+</html>
